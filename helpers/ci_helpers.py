@@ -68,11 +68,7 @@ def run_causal_impact():
         print("CausalImpact model initialized.")
 
     # Add in Plotly charts
-    try:
-        show_charts_with_plotly(ci)
-    except:
-        print("Error with plotly")
-        print("")
+    show_charts_with_plotly(ci)
 
     # Add download button to download 
     csv = sth.convert_df(ci.inferences)
@@ -129,7 +125,7 @@ def show_charts_with_plotly(ci):
     print(f"intervention start: {intervention_start}")
     print(f"""Dataframe:
 
-{ci.inference.tail(20)}                    
+{ci.inferences.tail(20)}                    
           
           """)
     
