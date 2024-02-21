@@ -2,6 +2,7 @@ import streamlit as st
 from helpers import pandas_helpers as pdh, st_helpers as sth, charting_helpers as ch
 import datetime
 import pandas as pd
+import pytz
 
 
 def handle_dates_checks():
@@ -36,7 +37,7 @@ def handle_dates_checks():
                         value = default_date,
                         min_value=st.session_state.default_first_date_to_show,
                         max_value=st.session_state.default_last_date_to_show,
-                        disabled=st.session_state.step != "dates"
+                        disabled=st.session_state.step != "dates",   
                         )
                 
                 if st.session_state.chosen_date!=default_date:
@@ -45,12 +46,17 @@ def handle_dates_checks():
 
                     
 
-                chosen_timestamp = datetime.datetime.combine(
-                     st.session_state.chosen_date, datetime.time()
-                     ).timestamp()
+
+                # Combining chosen date with midnight time to create a datetime object
+                chosen_datetime = datetime.datetime.combine(
+                    st.session_state.chosen_date, datetime.time()
+                )
                 
-                chosen_timestamp = pd.Timestamp(
-                     chosen_timestamp, unit='s')
+                # Convert datetime object to Unix timestamp (seconds since epoch)
+                chosen_timestamp_unix = chosen_datetime.timestamp()
+
+                # Creating a Timestamp object in UTC timezone
+                chosen_timestamp = pd.Timestamp(chosen_timestamp_unix, unit='s', tz='UTC')
 
 
                 data["test_period"] = data["time"]>=chosen_timestamp

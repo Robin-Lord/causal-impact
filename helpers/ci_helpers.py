@@ -68,7 +68,11 @@ def run_causal_impact():
         print("CausalImpact model initialized.")
 
     # Add in Plotly charts
-    show_charts_with_plotly(ci)
+    try:
+        show_charts_with_plotly(ci)
+    except:
+        print("Error with plotly")
+        print("")
 
     # Add download button to download 
     csv = sth.convert_df(ci.inferences)
@@ -121,6 +125,13 @@ def show_charts_with_plotly(ci):
     # Adjusting the approach to determine the intervention date
     # Convert the start of the post-period to a Timestamp, if not already one
     intervention_start = pd.to_datetime(ci.post_period[0])
+
+    print(f"intervention start: {intervention_start}")
+    print(f"""Dataframe:
+
+{ci.inference.tail(20)}                    
+          
+          """)
     
     # Dropping the first few rows from inferences as needed
     inferences = ci.inferences.iloc[5:]  # Assuming dropping rows doesn't affect the intervention date calculation

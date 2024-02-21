@@ -55,7 +55,7 @@ def date_col_conversion(
         )-> pd.DataFrame:
 
     try:
-        df["time"] = pd.to_datetime(df[date_col], format="%Y-%m-%d")
+        df["time"] = pd.to_datetime(df[date_col], format="%Y-%m-%d", utc=True)
         df = df.rename(columns={date_col:"ds"}, inplace = False)
     except Exception as e:
         raise ValueError(f"There was a problem with reading your date column ({date_col}) - please make sure you've selected the right one, and that all the dates are in YYYY-MM-DD format")
