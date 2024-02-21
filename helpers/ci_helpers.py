@@ -71,7 +71,7 @@ def run_causal_impact():
     show_charts_with_plotly(ci)
 
     # Add download button to download 
-    csv = sth.convert_df(ci.inferences)
+    csv = sth.convert_df(ci.inferences, index = True)
 
     st.markdown(f"""
 -------------
