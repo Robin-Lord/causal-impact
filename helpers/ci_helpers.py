@@ -50,6 +50,9 @@ def run_causal_impact():
 
     data_for_ci.set_index('time', inplace=True)
 
+    # Make sure data is always in the right order
+    data_for_ci.sort_index(inplace=True)
+
     pre_dates, post_dates = extract_start_and_end(data_for_ci)
 
     data_for_ci = clean_columns(data_for_ci)
@@ -167,40 +170,40 @@ However, if the confidence intervals (the shaded area) is **very** big before th
     # Display Chart 1
     st.plotly_chart(fig1)
 
-#     # Or adjust the DataFrame to focus on post-intervention data
-#     post_intervention_inferences = inferences.loc[intervention_start:]
+    # Or adjust the DataFrame to focus on post-intervention data
+    post_intervention_inferences = inferences.loc[intervention_start:]
 
-#     # Calculate the cumulative difference (Impact) starting from the intervention date
-#     cumulative_difference = (post_intervention_inferences['post_cum_y'] - post_intervention_inferences['post_cum_pred'])
+    # Calculate the cumulative difference (Impact) starting from the intervention date
+    cumulative_difference = (post_intervention_inferences['post_cum_y'] - post_intervention_inferences['post_cum_pred'])
 
-#     # Calculate adjusted confidence intervals for the cumulative difference
-#     cumulative_difference_lower = cumulative_difference + post_intervention_inferences['post_cum_pred_lower'] - post_intervention_inferences['post_cum_pred']
-#     cumulative_difference_upper = cumulative_difference + post_intervention_inferences['post_cum_pred_upper'] - post_intervention_inferences['post_cum_pred']
+    # Calculate adjusted confidence intervals for the cumulative difference
+    cumulative_difference_lower = cumulative_difference + post_intervention_inferences['post_cum_pred_lower'] - post_intervention_inferences['post_cum_pred']
+    cumulative_difference_upper = cumulative_difference + post_intervention_inferences['post_cum_pred_upper'] - post_intervention_inferences['post_cum_pred']
 
-#     st.markdown("""
-# ## Cumulative difference chart
+    st.markdown("""
+## Cumulative difference chart
                                 
-# This second chart is showing the estimated cumulative difference since the date you made the change.
+This second chart is showing the estimated cumulative difference since the date you made the change.
                 
-# Basically if actual performance is considerably higher than expected performance, it'll show a line that's going up and to the right. If that is the case and the shaded area does *not* cross "0" then there is a good chance that the change had a positive impact.
+Basically if actual performance is considerably higher than expected performance, it'll show a line that's going up and to the right. If that is the case and the shaded area does *not* cross "0" then there is a good chance that the change had a positive impact.
                 
-# If the actual performance is lower than expected, then the line will be going down. If that's the case and the shaded area doesn't cross 0 then it's a good chance the change had a negative impact.
+If the actual performance is lower than expected, then the line will be going down. If that's the case and the shaded area doesn't cross 0 then it's a good chance the change had a negative impact.
                 
-#                 """)
+                """)
 
-#     # Chart 2: Post-Intervention Cumulative Impact and Confidence Intervals
-#     fig2 = go.Figure()
+    # Chart 2: Post-Intervention Cumulative Impact and Confidence Intervals
+    fig2 = go.Figure()
 
-#     # Adding trace for the cumulative difference (Impact)
-#     fig2.add_trace(go.Scatter(x=post_intervention_inferences.index, y=cumulative_difference, mode='lines', name='Cumulative Difference'))
+    # Adding trace for the cumulative difference (Impact)
+    fig2.add_trace(go.Scatter(x=post_intervention_inferences.index, y=cumulative_difference, mode='lines', name='Cumulative Difference'))
 
-#     # Adding traces for the adjusted confidence intervals
-#     fig2.add_trace(go.Scatter(x=post_intervention_inferences.index, y=cumulative_difference_lower, mode='lines', name='CI Lower', line=dict(width=0)))
-#     fig2.add_trace(go.Scatter(x=post_intervention_inferences.index, y=cumulative_difference_upper, mode='lines', name='CI Upper', line=dict(width=0), fill='tonexty'))
+    # Adding traces for the adjusted confidence intervals
+    fig2.add_trace(go.Scatter(x=post_intervention_inferences.index, y=cumulative_difference_lower, mode='lines', name='CI Lower', line=dict(width=0)))
+    fig2.add_trace(go.Scatter(x=post_intervention_inferences.index, y=cumulative_difference_upper, mode='lines', name='CI Upper', line=dict(width=0), fill='tonexty'))
 
-#     fig2.update_layout(title='Post-Intervention Cumulative Difference', xaxis_title='Time', yaxis_title='Cumulative Difference', legend_title='Legend')
+    fig2.update_layout(title='Post-Intervention Cumulative Difference', xaxis_title='Time', yaxis_title='Cumulative Difference', legend_title='Legend')
 
-#     # Display Chart 2
-#     st.plotly_chart(fig2)
+    # Display Chart 2
+    st.plotly_chart(fig2)
 
-#     st.write("Check out the 'More Detail' section section for the original charts produced by Causal Impact, and an automated test writeup from the library (it's a little maths-y but you might still find it useful).")
+    st.write("Check out the 'More Detail' section section for the original charts produced by Causal Impact, and an automated test writeup from the library (it's a little maths-y but you might still find it useful).")
