@@ -50,6 +50,9 @@ def run_causal_impact():
 
     data_for_ci.set_index('time', inplace=True)
 
+    # Make sure data is always in the right order
+    data_for_ci.sort_index(inplace=True)
+
     pre_dates, post_dates = extract_start_and_end(data_for_ci)
 
     data_for_ci = clean_columns(data_for_ci)
@@ -71,7 +74,7 @@ def run_causal_impact():
     show_charts_with_plotly(ci)
 
     # Add download button to download 
-    csv = sth.convert_df(ci.inferences)
+    csv = sth.convert_df(ci.inferences, index = True)
 
     st.markdown(f"""
 -------------
@@ -121,13 +124,6 @@ def show_charts_with_plotly(ci):
     # Adjusting the approach to determine the intervention date
     # Convert the start of the post-period to a Timestamp, if not already one
     intervention_start = pd.to_datetime(ci.post_period[0])
-
-    print(f"intervention start: {intervention_start}")
-    print(f"""Dataframe:
-
-{ci.inferences.tail(20)}                    
-          
-          """)
     
     # Dropping the first few rows from inferences as needed
     inferences = ci.inferences.iloc[5:]  # Assuming dropping rows doesn't affect the intervention date calculation

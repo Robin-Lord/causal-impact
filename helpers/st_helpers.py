@@ -23,6 +23,6 @@ def continue_or_reset(message = ""):
     
 
 @st.experimental_memo
-def convert_df(df):
-   return df.to_csv(index=False).encode('utf-8')
+def convert_df(df, index = False):
+   return df.to_csv(index=index).encode('utf-8')
 
