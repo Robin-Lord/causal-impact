@@ -124,12 +124,6 @@ def show_charts_with_plotly(ci):
     # Adjusting the approach to determine the intervention date
     # Convert the start of the post-period to a Timestamp, if not already one
     intervention_start = pd.to_datetime(ci.post_period[0])
-
-    st.write(f"intervention start: {intervention_start}")
-    st.write(f"""Dataframe: 
-             
-""")
-    st.write(ci.inferences.tail(20))
     
     # Dropping the first few rows from inferences as needed
     inferences = ci.inferences.iloc[5:]  # Assuming dropping rows doesn't affect the intervention date calculation
