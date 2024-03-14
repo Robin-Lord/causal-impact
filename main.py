@@ -3,7 +3,11 @@ import streamlit as st
 from content_blocks import initial, file_upload, choose_columns, choose_dates, show_impact_estimate
 import logging
 
-def main():
+import ga4py.add_tracker as add_tracker
+from ga4py.custom_arguments import MeasurementArguments
+
+@add_tracker.analytics_hit_decorator
+def main() -> None:
 
     # Handle initial variable setup
     initial.set_variables()
@@ -37,7 +41,15 @@ def main():
 
 if __name__ == "__main__":
     try:
-        main()
+        # Add tracking
+        tracking_args_dict: MeasurementArguments = {
+            # "testing_mode": True,
+            "page_location": "python_causal_impact", 
+            "page_title": "python causal impact", 
+            "skip_stage": ["start", "end"],
+            "logging": "all"
+        }
+        main(ga4py_args_remove = tracking_args_dict)
     except Exception as e:
         # Log the full traceback to console or a file
         logging.error("An exception occurred", exc_info=True)

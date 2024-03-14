@@ -4,6 +4,8 @@ import pandas as pd
 from helpers import st_helpers as sth
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import ga4py.add_tracker as add_tracker
+from ga4py.custom_arguments import MeasurementArguments
 
 def extract_start_and_end(data_for_ci):
     # Pull start and end dates at this point to be certain they match
@@ -42,6 +44,15 @@ def clean_columns(data_for_ci):
     data_for_ci = data_for_ci.fillna(0)
     return data_for_ci
 
+@add_tracker.analytics_hit_decorator
+def get_ci(data_for_ci, pre_dates, post_dates) -> None:
+    # Only run if haven't run before
+    ci = CausalImpact(
+        data_for_ci, 
+        pre_dates, 
+        post_dates, 
+        )
+    st.session_state.ci = ci
 
 def run_causal_impact():
     data = st.session_state.cleaned_data
@@ -59,11 +70,19 @@ def run_causal_impact():
 
 
     # Run Causal Impact analysis including the holiday indicators as part of the data
-    ci = CausalImpact(
-        data_for_ci, 
-        pre_dates, 
-        post_dates, 
-        )
+
+    if st.session_state.ci == None:
+        tracking_args_dict = st.session_state.basic_tracking_info
+        tracking_args_dict["skip_stage"] = ["start", "end"]
+        tracking_args_dict["stage"] = "measure_impact"
+
+        get_ci(
+            data_for_ci = data_for_ci, 
+            pre_dates = pre_dates, 
+            post_dates = post_dates,
+            ga4py_args_remove = tracking_args_dict)
+    
+    ci = st.session_state.ci
     
     if ci is None:
         raise ValueError("Something seems to have gone wrong - CausalImpact model didn't initialise correctly!")

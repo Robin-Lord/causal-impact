@@ -1,6 +1,7 @@
 {
     "conventionalCommits.scopes": [
         "main",
-        "Dates"
+        "Dates",
+        "tracking"
     ]
 }

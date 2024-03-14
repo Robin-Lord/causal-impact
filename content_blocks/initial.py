@@ -3,6 +3,8 @@ import streamlit as st
 import pandas as pd
 from helpers import st_helpers as sth
 
+from ga4py.custom_arguments import MeasurementArguments
+
 def set_variables():
     # Set session states to track which part of the process we're in
     if "step" not in st.session_state:
@@ -18,6 +20,16 @@ def set_variables():
         st.session_state.target_metric_col = None
         st.session_state.regressor_col_list = None
         st.holiday_country = "None"
+
+        st.session_state.ci = None
+
+        # Add tracking arguments to be referenced throughout the script
+        basic_tracking_info: MeasurementArguments = {
+            # "testing_mode": True,
+            "page_location": "python_causal_impact", 
+            "page_title": "python causal impact", 
+        }
+        st.session_state.basic_tracking_info = basic_tracking_info
 
 
 

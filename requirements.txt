@@ -73,3 +73,4 @@ validators==0.22.0
 xarray==2024.2.0
 xarray-einstats==0.7.0
 zipp==3.17.0
+git+https://github.com/Robin-Lord/ga4-py.git@1.0.0
