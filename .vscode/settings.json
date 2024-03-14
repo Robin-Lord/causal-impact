@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "main",
         "Dates",
-        "tracking"
+        "tracking",
+        "data_cleansing"
     ]
 }
